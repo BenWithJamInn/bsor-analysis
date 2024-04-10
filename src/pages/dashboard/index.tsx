@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import RGL, {Layout, WidthProvider} from "react-grid-layout";
-import {useTheme} from "@mui/material";
+import {Box, useTheme} from "@mui/material";
 import {tokens} from "../../Theme";
 import DashboardItem from "./DashboardItem";
 import {infoPanel} from "./panels/InfoPanel";

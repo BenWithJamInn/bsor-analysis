@@ -1,18 +1,18 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-interface RawReplayState {
+interface RawScoreData {
   activeScoreID: string | null;
   scores: {
     [key: string]: ReplayData
   }
 }
 
-interface ReplayData {
+export interface ReplayData {
   scoreInfo: { [key: string]: any }
   decodedReplay: { [key: string]: any }
 }
 
-const initialState: RawReplayState = {
+const initialState: RawScoreData = {
   activeScoreID: null,
   scores: {}
 }

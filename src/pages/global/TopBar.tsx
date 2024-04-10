@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {ColorModeContext, tokens} from "../../Theme";
-import {Box, IconButton, InputBase, useTheme} from "@mui/material";
+import {Avatar, Box, Divider, Grid, IconButton, InputBase, Typography, useTheme} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   DarkModeOutlined,
@@ -9,38 +9,164 @@ import {
   PersonOutlined,
   SettingsOutlined
 } from "@mui/icons-material";
+import {useFormik} from "formik";
+import * as Yup from 'yup';
+import {fetchScore} from "../../data/DataFetcher";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../state/store";
+import {addScore} from "../../state/rawReplaysSlice";
+import StatBox from "../../components/StatBox";
+
 
 const TopBar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+  const rawReplay = useSelector((state: RootState) => state.rawReplays)
+  const dispatch = useDispatch();
+
+  const formik = useFormik({
+    initialValues: {
+      scoreid: ""
+    },
+    onSubmit: async values => {
+      const data = await fetchScore(values.scoreid)
+      if (data === null) {
+        alert("Failed to fetch score")
+        return;
+      }
+      dispatch(addScore({id: values.scoreid, data: data}))
+    },
+    validationSchema: Yup.object({
+      scoreid: Yup.number()
+        .positive('Must be positive!')
+        .required('Required')
+    })
+  })
+
+  const activeData = rawReplay.scores[rawReplay.activeScoreID || ""]
+  let player = null, song = null, score = null;
+  if (activeData) {
+    player = activeData.scoreInfo.player;
+    song = activeData.scoreInfo.song;
+    score = activeData.scoreInfo
+  }
+  console.log(activeData)
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
-      {/*Search Bar*/}
-      <Box display="flex" bgcolor={colors.primary[400]} borderRadius="3px">
-        <InputBase sx={{ml: 2, flex: 1}} placeholder="Search" />
-        <IconButton type="button" sx={{p: 1}}>
-          <SearchIcon />
-        </IconButton>
+    <Box
+      height="4rem"
+      display="flex"
+      justifyContent="space-between"
+      // bgcolor={colors.primary[400]}
+      borderBottom={`1px solid ${colors.primary[300]}`}
+    >
+      <Box
+        height="100%"
+        display="flex"
+        alignItems="center"
+        p={1}
+      >
+        {/*Search Bar*/}
+        <Box
+          display="flex"
+          bgcolor={colors.primary[400]}
+          borderRadius="3px"
+          border={`1px solid ${formik.errors.scoreid && formik.touched.scoreid ? colors.redAccent[500] : "transparent"}`}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <InputBase
+              sx={{ml: 2, flex: 1}}
+              id="scoerid"
+              name="scoreid"
+              placeholder="Beatleader Score ID"
+              value={formik.values.scoreid}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <IconButton type="submit" sx={{p: 1}}>
+              <SearchIcon/>
+            </IconButton>
+          </form>
+        </Box>
+        <Box ml="10px" display="flex" alignItems="center" gap="10px" height="100%" >
+          {
+            activeData ? (
+              <>
+                {/*Player Data*/}
+                <Avatar src={player!.avatar} />
+                <Typography variant="h4" >
+                  {player!.name}
+                </Typography>
+                <Divider orientation="vertical" flexItem />
+                {/*Song Info*/}
+                <img src={song!.cover} height="40rem" style={{borderRadius: "10px"}} />
+                <Box>
+                  <Typography variant="h5">
+                    {song!.name}
+                  </Typography>
+                  <Typography variant="h5">
+                      {song!.author}
+                  </Typography>
+                </Box>
+                <Divider orientation="vertical" flexItem />
+                {/*Score Data*/}
+                <StatBox color={colors.primary[300]}>
+                  <Typography variant="h5">
+                    {Math.round(score!.accuracy * 10000) / 100}%
+                  </Typography>
+                </StatBox>
+                <StatBox color={colors.primary[300]}>
+                  <Typography variant="h5">
+                    {Math.round(score!.pp * 100) / 100}pp
+                  </Typography>
+                </StatBox>
+                <Grid
+                  height="100%"
+                  spacing={0}
+                  container
+                >
+                  <Grid item xs={12} p={0.5}>
+                    <StatBox color={colors.primary[300]}>
+                      <Typography variant="h5">
+                        {Math.round(score!.pp * 100) / 100}pp
+                      </Typography>
+                    </StatBox>
+                  </Grid>
+                  <Grid item xs={12} p={0.5}>
+                    <StatBox color={colors.primary[300]}>
+                      <Typography variant="h5">
+                        {Math.round(score!.pp * 100) / 100}pp
+                      </Typography>
+                    </StatBox>
+                  </Grid>
+                </Grid>
+              </>
+            ) : (
+              <Typography variant="h3">
+                No Score Loaded
+              </Typography>
+            )
+          }
+        </Box>
       </Box>
-    {/*Icons*/}
+      {/*Icons*/}
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === 'dark' ? (
-            <DarkModeOutlined />
+            <DarkModeOutlined/>
           ) : (
-            <LightModeOutlined />
+            <LightModeOutlined/>
           )}
         </IconButton>
         <IconButton>
-          <NotificationsOutlined />
+          <NotificationsOutlined/>
         </IconButton>
         <IconButton>
-          <SettingsOutlined />
+          <SettingsOutlined/>
         </IconButton>
         <IconButton>
-          <PersonOutlined />
+          <PersonOutlined/>
         </IconButton>
       </Box>
     </Box>
