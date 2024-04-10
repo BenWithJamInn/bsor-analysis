@@ -1,7 +1,7 @@
 import {createContext, useState, useMemo} from "react";
 import {createTheme, PaletteMode, Theme, ThemeOptions} from "@mui/material";
 
-export const tokens = (mode: String) => ({
+export const tokens = (mode: string) => ({
   ...(mode === "dark"
     ? {
       grey: {
@@ -18,7 +18,7 @@ export const tokens = (mode: String) => ({
       primary: {
         100: "#d0d1d5",
         200: "#a1a4ab",
-        300: "#727681",
+        300: "#303b5e",
         400: "#1F2A40",
         500: "#141b2d",
         600: "#101624",
