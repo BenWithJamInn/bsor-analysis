@@ -16,10 +16,12 @@ const DashboardItem = (props: DashboardItemProps) => {
       bgcolor={colors.primary[400]}
       height="100%"
       width="100%"
+      borderRadius="10px"
     >
       <Box
         bgcolor={colors.primary[300]}
         p={0.25}
+        borderRadius="7px 7px 0 0"
       >
         <Typography variant="h5">
           {props.title}

@@ -34,6 +34,7 @@ const Dashboard = () => {
       h: 2,
       maxW: 4,
       maxH: 4,
+      static: true
     } as PanelState
     addItem(info)
   }, [])

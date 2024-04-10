@@ -1,15 +1,16 @@
 import React from 'react';
 import {Panel} from "./Panel";
+import {Box, Button} from "@mui/material";
 
 const InfoPanelElement = () => {
-  return (
-    <div>
-      Information here
+  // const rawReplay = useSelector((state: RootState) => state.rawReplays.value)
+  // const dispatch = useDispatch();
 
-      <p>
-        More information here
-      </p>
-    </div>
+  return (
+    <Box>
+      Information here<br/>
+      <Button color="primary">Test</Button>
+    </Box>
   );
 };
 
@@ -18,6 +19,7 @@ export const infoPanel = {
     title: "Information",
     minW: 3,
     minH: 2,
+    static: true
   },
   element: <InfoPanelElement />
 } as Panel;
