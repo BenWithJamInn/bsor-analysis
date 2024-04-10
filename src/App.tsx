@@ -1,11 +1,22 @@
 import React from 'react';
 import './App.css';
+import {ColorModeContext, useMode} from "./Theme";
+import {CssBaseline, ThemeProvider} from "@mui/material";
 
 function App() {
-  return (
-    <div>
+  const [theme, colorMode] = useMode();
 
-    </div>
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="App">
+          <main className="content">
+
+          </main>
+        </div>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
