@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import rawReplayReducer from "./rawReplaysSlice";
+import processedDataReducer from "./processedDataSlice";
 
 export const store = configureStore({
   reducer: {
-    rawReplays: rawReplayReducer
+    rawReplays: rawReplayReducer,
+    processedData: processedDataReducer
   }
 })
 

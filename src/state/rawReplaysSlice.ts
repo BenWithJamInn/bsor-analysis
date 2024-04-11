@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {Replay, ReplayProcessed, Score, TimeSeriesData} from "../data/DataTypes";
 
 interface RawScoreData {
   activeScoreID: string | null;
@@ -8,8 +9,9 @@ interface RawScoreData {
 }
 
 export interface ReplayData {
-  scoreInfo: { [key: string]: any }
-  decodedReplay: { [key: string]: any }
+  scoreInfo: Score;
+  processedReplay: ReplayProcessed;
+  timeSeriesData: TimeSeriesData;
 }
 
 const initialState: RawScoreData = {

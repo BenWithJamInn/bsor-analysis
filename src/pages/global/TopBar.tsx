@@ -11,10 +11,9 @@ import {
 } from "@mui/icons-material";
 import {useFormik} from "formik";
 import * as Yup from 'yup';
-import {fetchScore} from "../../data/DataFetcher";
-import {useDispatch, useSelector} from "react-redux";
+import {fetchScore} from "../../data/DataManager";
+import {useSelector} from "react-redux";
 import {RootState} from "../../state/store";
-import {addScore} from "../../state/rawReplaysSlice";
 import StatBox from "../../components/StatBox";
 
 
@@ -23,19 +22,13 @@ const TopBar = () => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const rawReplay = useSelector((state: RootState) => state.rawReplays)
-  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
       scoreid: ""
     },
     onSubmit: async values => {
-      const data = await fetchScore(values.scoreid)
-      if (data === null) {
-        alert("Failed to fetch score")
-        return;
-      }
-      dispatch(addScore({id: values.scoreid, data: data}))
+      const ignored = fetchScore(values.scoreid);
     },
     validationSchema: Yup.object({
       scoreid: Yup.number()
@@ -51,7 +44,6 @@ const TopBar = () => {
     song = activeData.scoreInfo.song;
     score = activeData.scoreInfo
   }
-  console.log(activeData)
 
   return (
     <Box
@@ -121,26 +113,28 @@ const TopBar = () => {
                     {Math.round(score!.pp * 100) / 100}pp
                   </Typography>
                 </StatBox>
-                <Grid
-                  height="100%"
-                  spacing={0}
-                  container
-                >
-                  <Grid item xs={12} p={0.5}>
-                    <StatBox color={colors.primary[300]}>
-                      <Typography variant="h5">
-                        {Math.round(score!.pp * 100) / 100}pp
-                      </Typography>
-                    </StatBox>
+                <Box>
+                  <Grid
+                    height="100%"
+                    spacing={0.5}
+                    container
+                  >
+                    <Grid item xs={12}>
+                      <StatBox color={colors.primary[300]}>
+                        <Typography variant="h5">
+                          {Math.round(score!.pp * 100) / 100}pp
+                        </Typography>
+                      </StatBox>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <StatBox color={colors.primary[300]}>
+                        <Typography variant="h5">
+                          {Math.round(score!.pp * 100) / 100}pp
+                        </Typography>
+                      </StatBox>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} p={0.5}>
-                    <StatBox color={colors.primary[300]}>
-                      <Typography variant="h5">
-                        {Math.round(score!.pp * 100) / 100}pp
-                      </Typography>
-                    </StatBox>
-                  </Grid>
-                </Grid>
+                </Box>
               </>
             ) : (
               <Typography variant="h3">

@@ -1,4 +1,4 @@
-import {axiosInstance} from "./DataFetcher";
+import {axiosInstance} from "./DataManager";
 
 export async function checkBSOR(file, isLink) {
     if (isLink) {
