@@ -4,7 +4,7 @@ import processedDataReducer from "./processedDataSlice";
 
 export const store = configureStore({
   reducer: {
-    rawReplays: rawReplayReducer,
+    scoreData: rawReplayReducer,
     processedData: processedDataReducer
   }
 })

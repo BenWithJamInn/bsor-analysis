@@ -21,7 +21,7 @@ const TopBar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-  const rawReplay = useSelector((state: RootState) => state.rawReplays)
+  const rawReplay = useSelector((state: RootState) => state.scoreData)
 
   const formik = useFormik({
     initialValues: {

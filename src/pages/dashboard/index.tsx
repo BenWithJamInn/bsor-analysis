@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import RGL, {Layout, WidthProvider} from "react-grid-layout";
-import {Box, useTheme} from "@mui/material";
+import {useTheme} from "@mui/material";
 import {tokens} from "../../Theme";
 import DashboardItem from "./DashboardItem";
 import {infoPanel} from "./panels/InfoPanel";
 import {Panel} from "./panels/Panel";
+import {linePanel} from "./panels/LineGraphPanel";
 
 const ReactGridLayout = WidthProvider(RGL);
 let idCounter = 0;
@@ -17,7 +18,8 @@ interface PanelState extends Layout {
 }
 
 const panels = {
-  "info": infoPanel
+  "info": infoPanel,
+  "line": linePanel
 } as {[key: string]: Panel};
 
 const Dashboard = () => {
@@ -27,14 +29,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     const info = {
-      type: "info",
+      type: "line",
+      static: true,
       x: 0,
       y: 0,
-      w: 2,
-      h: 2,
-      maxW: 4,
-      maxH: 4,
-      static: true
+      w: 6,
+      h: 3,
     } as PanelState
     addItem(info)
   }, [])
