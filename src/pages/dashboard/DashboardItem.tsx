@@ -22,6 +22,7 @@ const DashboardItem = (props: DashboardItemProps) => {
         bgcolor={colors.primary[300]}
         p={0.25}
         borderRadius="7px 7px 0 0"
+        className="drag-handle"
       >
         <Typography variant="h5">
           {props.title}

@@ -65,9 +65,11 @@ const LineGraphElement = () => {
           obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
           return obj;
         },
-      }
+      },
     } as EChartsOption;
     myChart.setOption(options);
+    myChart.group = "maingroup";
+    echarts.connect("maingroup");
   }, [scoreData])
 
   return (

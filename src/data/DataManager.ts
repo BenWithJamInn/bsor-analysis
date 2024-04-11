@@ -12,6 +12,7 @@ import {
   TimeSeriesData
 } from "./DataTypes";
 import {array} from "yup";
+import {log} from "node:util";
 
 export const axiosInstance = axios.create({
   timeout: 3000
@@ -65,8 +66,9 @@ function processNoteData(note: ReplayNote): ReplayNoteProcessed {
   let processedData = {
     ...note
   } as ReplayNoteProcessed;
+  console.log(note)
   // handedness
-  processedData.handedness = note.noteCutInfo.saberType as Handedness;
+  processedData.handedness = note.noteCutInfo.saberType as Handedness; // CAN BE UNDEFINED // not cut incase of miss
   // data extracted from noteID
   let x = note.noteID;
   processedData.cutDirection = x % 10;

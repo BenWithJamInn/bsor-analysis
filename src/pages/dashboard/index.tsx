@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import RGL, {Layout, WidthProvider} from "react-grid-layout";
+import RGL from "react-grid-layout";
+import {Layout, WidthProvider} from "react-grid-layout";
 import {useTheme} from "@mui/material";
 import {tokens} from "../../Theme";
 import DashboardItem from "./DashboardItem";
@@ -25,19 +26,18 @@ const panels = {
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [layout, setLayout] = useState([] as PanelState[]);
+  const [layout, setLayout] = useState(loadFromLS());
 
-  useEffect(() => {
-    const info = {
-      type: "line",
-      static: true,
-      x: 0,
-      y: 0,
-      w: 6,
-      h: 3,
-    } as PanelState
-    addItem(info)
-  }, [])
+  // useEffect(() => {
+  //   const info = {
+  //     type: "line",
+  //     x: 0,
+  //     y: 0,
+  //     w: 6,
+  //     h: 3,
+  //   } as PanelState
+  //   addItem(info)
+  // }, [])
 
   function addItem(info: PanelState) {
     const key = (idCounter++).toString()
@@ -46,13 +46,16 @@ const Dashboard = () => {
   }
 
   function updateItem(layout: Layout[]) {
-    setLayout(old => old.map((item, index) => {
-      console.log(item, layout[index])
-      return {
-        ...item,
-        ...layout[index]
-      }
-    }))
+    setLayout(old => {
+      const newLayout = old.map((item, index) => {
+        return {
+          ...item,
+          ...layout[index]
+        };
+      });
+      saveToLS(newLayout);
+      return newLayout;
+    })
   }
 
   function createPanelElement(info: PanelState): React.ReactNode {
@@ -72,11 +75,24 @@ const Dashboard = () => {
     <div>
       <ReactGridLayout
         onLayoutChange={updateItem}
+        draggableHandle=".drag-handle"
       >
         {layout.map(item => createPanelElement(item))}
       </ReactGridLayout>
     </div>
   );
 };
+
+function saveToLS(layout: PanelState[]) {
+  localStorage.setItem("layout", JSON.stringify(layout))
+}
+
+function loadFromLS(): PanelState[] {
+  const layout = localStorage.getItem("layout")
+  if (layout) {
+    return JSON.parse(layout)
+  }
+  return []
+}
 
 export default Dashboard;
